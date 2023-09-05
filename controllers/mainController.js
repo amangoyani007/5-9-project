@@ -20,11 +20,25 @@ const Registration = async (req, res) => {
         const newEmail = new Reg({ email, code });
         await newEmail.save();
 
-        res.status(200).json({msg: `You are in now and your 6 digite code for login is : ${newEmail.code}`})
+        res.status(200).json({ msg: `You are in now and your 6 digite code for login is : ${newEmail.code}` })
 
     } catch (err) {
         res.status(400).json({ err });
     };
 };
 
-module.exports = { HomePage, Registration };
+const Login = async (req, res) => {
+    try {
+        const { email } = req.body;
+        const task = await Reg.findOne({ email });
+        if (task) {
+            // console.log(task, "finded");
+            res.status(200).json({task})
+        }
+
+    } catch (err) {
+        res.status(400).json({ err });
+    };
+};
+
+module.exports = { HomePage, Registration, Login };
