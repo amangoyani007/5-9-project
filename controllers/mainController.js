@@ -31,17 +31,31 @@ const Registration = async (req, res) => {
 
 const Login = async (req, res) => {
     try {
-        const { email } = req.body;
+        const { email, code } = req.body;
+
+        if (!email || !code) {
+            res.status(400).json({ msg: "Bad Request" });
+        }
+
         const task = await Reg.findOne({ email });
+        
         if (task) {
             // console.log(task, "finded");
 
-            const code1 = task.code
+            if (code == task.code) {
+                // console.log("Success");
+                const code1 = task.code
 
-            const token = jwt.sign({ email , code1}, process.env.JWT_SECRET);
-            // console.log(token);
+                const token = jwt.sign({ email, code1 }, process.env.JWT_SECRET);
+                // console.log(token);
 
-            res.status(200).json({msg: `Logged in, and your JWT token is : ${token}`, })
+                res.status(200).json({ msg: `Logged in, and your JWT token is : '${token}'`, })
+            }
+            else{
+                res.status(200).json({msg: "Incorrect code or email"});
+            }
+
+
 
         }
 
