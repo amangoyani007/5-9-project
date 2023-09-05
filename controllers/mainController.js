@@ -1,4 +1,5 @@
 const Reg = require('../model/model')
+const Log = require('../model/loginModel')
 const jwt = require('jsonwebtoken');
 
 
@@ -38,7 +39,7 @@ const Login = async (req, res) => {
         }
 
         const task = await Reg.findOne({ email });
-        
+
         if (task) {
             // console.log(task, "finded");
 
@@ -51,8 +52,8 @@ const Login = async (req, res) => {
 
                 res.status(200).json({ msg: `Logged in, and your JWT token is : '${token}'`, })
             }
-            else{
-                res.status(200).json({msg: "Incorrect code or email"});
+            else {
+                res.status(200).json({ msg: "Incorrect code or email" });
             }
 
 
@@ -65,4 +66,16 @@ const Login = async (req, res) => {
     };
 };
 
-module.exports = { HomePage, Registration, Login };
+const Logout = async (req, res) => {
+    try {
+        const { email } = req.body;
+
+        const findLogout = await Reg.findOne({ email });
+
+        res.status(200).json({ msg: `You are loged out from this email : '${findLogout.email}'` })
+    } catch (err) {
+        res.status(400).json({ err })
+    }
+}
+
+module.exports = { HomePage, Registration, Login, Logout };
