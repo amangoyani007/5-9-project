@@ -7,14 +7,13 @@ const Registration = new mongoose.Schema({
         lowercase: true,
         unique: true,
         required: 'Email address is required',
-        // validate: [validateEmail, 'Please fill a valid email address'],
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
     },
     code: {
         type: Number,
         required: [true, 'Code is required'],
         min: 100000,
-        max: 999999,
+        max: 666666,
       },
 });
 
