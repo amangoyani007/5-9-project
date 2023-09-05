@@ -1,4 +1,6 @@
 const Reg = require('../model/model')
+const jwt = require('jsonwebtoken');
+
 
 const HomePage = (req, res) => {
     console.log("home page");
@@ -33,11 +35,19 @@ const Login = async (req, res) => {
         const task = await Reg.findOne({ email });
         if (task) {
             // console.log(task, "finded");
-            res.status(200).json({task})
+
+            const code1 = task.code
+
+            const token = jwt.sign({ email , code1}, process.env.JWT_SECRET);
+            // console.log(token);
+
+            res.status(200).json({msg: `Logged in, and your JWT token is : ${token}`, })
+
         }
 
     } catch (err) {
         res.status(400).json({ err });
+        console.log(err);
     };
 };
 
